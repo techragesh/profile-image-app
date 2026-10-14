@@ -1,0 +1,35 @@
+spring:
+  thymeleaf:
+    cache: false          # disable template caching — useful in dev so edits
+    # to profile.html show up without restarting
+    prefix: classpath:/templates/   # only needed if you move templates elsewhere
+    suffix: .html                   # only needed if you use a different extension
+  datasource:
+    url: jdbc:sqlserver://profilepic.database.windows.net:1433;database=profile-sql-db-8000263;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30
+    username: sqladmin
+    password: Welcome123#
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    hibernate:
+      ddl-auto: update   # table already exists - don't let Hibernate alter/create it
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+azure:
+  storage:
+    account-url: https://proficpic.blob.core.windows.net
+    container-name: profiles
+
+# --- how to run locally ---
+# Windows (PowerShell):  $env:DB_PASSWORD="your_real_password"
+# macOS/Linux:            export DB_PASSWORD=your_real_password
+# Never commit the real password to source control.
+# For anything beyond a POC, switch to Azure AD / Managed Identity auth
+# for the DB too (authentication=ActiveDirectoryManagedIdentity on the
+# JDBC URL) so there's no password to manage at all - same pattern
+# already used for Blob Storage access below.

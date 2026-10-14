@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Card</title>
+    <link rel="stylesheet" th:href="@{/css/card.css}">
+</head>
+<body>
+
+<div class="page">
+
+    <div class="dp-card">
+        <div class="dp-card-top">
+            <div class="chip"></div>
+            <span class="bank-label">RABOBANK</span>
+        </div>
+
+        <div class="dp-avatar">
+            <img th:if="${hasImage}"
+                 th:src="@{'/profile/' + ${userId} + '/image'}"
+                 class="dp-avatar-img" alt="Profile picture"/>
+            <span th:unless="${hasImage}" class="dp-avatar-placeholder-text">No Photo</span>
+        </div>
+
+        <div class="card-number">**** **** **** <span th:text="${userId}">0000</span></div>
+
+        <div class="card-footer">
+            <div>
+                <div class="label">Card Holder</div>
+                <div class="value">User <span th:text="${userId}"></span></div>
+            </div>
+            <div>
+                <div class="label">Valid Thru</div>
+                <div class="value">12/99</div>
+            </div>
+        </div>
+    </div>
+
+    <form th:action="@{'/profile/' + ${userId} + '/upload'}"
+          method="post" enctype="multipart/form-data" class="upload-form">
+        <input type="file" name="file" accept="image/*" required/>
+        <button type="submit">Upload / Update Picture</button>
+    </form>
+
+    <p th:if="${message}" th:text="${message}" class="flash-message"></p>
+
+    <div class="profile-list">
+        <div class="profile-list-title">All profiles</div>
+
+        <a th:each="p : ${profiles}"
+           th:href="@{'/profile/' + ${p.userId}}"
+           class="profile-list-item">
+            <div class="list-avatar">
+                <img th:src="@{'/profile/' + ${p.userId} + '/image'}" alt="Profile picture"/>
+            </div>
+            <div class="profile-list-info">
+                <div class="profile-list-userid">User <span th:text="${p.userId}"></span></div>
+                <div class="profile-list-account" th:text="${p.accountNumber}"></div>
+            </div>
+        </a>
+
+        <div th:if="${#lists.isEmpty(profiles)}" class="profile-list-empty">
+            No profiles uploaded yet.
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
